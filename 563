@@ -1,0 +1,25 @@
+/* Binary Tree Tilt
+
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+ 
+int _findTilt(struct TreeNode* root, int *sum)
+{
+    if(root == NULL)
+        return 0;
+    int left = _findTilt(root->left, sum);
+    int right = _findTilt(root->right, sum);
+    *sum += abs(left - right);
+    return root->val+left+right;
+}
+
+int findTilt(struct TreeNode* root) {
+    int sum = 0;
+    _findTilt(root, &sum);
+    return sum;
+}
