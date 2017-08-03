@@ -10,3 +10,43 @@ public:
         return sum;
     }
 };
+
+// C code
+
+void _swap(int* a, int* b)
+{
+    int tmp = *b;
+    *b=*a;
+    *a=tmp;
+}
+
+int split_array(int* nums, int l, int r)
+{
+    int key = nums[r-1];
+    int i=l-1, j=l;
+    for(;j<r-1;j++)
+    {
+        if(nums[j] < key)
+            _swap(&nums[++i], &nums[j]);
+    }
+    _swap(&nums[++i], &nums[r-1]);
+    return i;
+}
+
+void q_sort(int* nums, int l, int r)
+{
+    if(l < r)
+    {
+        int m = split_array(nums, l, r);
+        q_sort(nums, l, m);
+        q_sort(nums, m+1, r);
+    }
+}
+
+int arrayPairSum(int* nums, int numsSize) {
+    q_sort(nums, 0, numsSize);
+    int ret = 0;
+    for(int i=0; i<numsSize; i+=2)
+        ret += nums[i];
+    return ret;
+}
