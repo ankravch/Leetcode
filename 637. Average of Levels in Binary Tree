@@ -36,4 +36,40 @@ public:
             ret[i] /= count[i];
         return ret;
     }
+    
+    //bfs  
+    vector<double> averageOfLevels(TreeNode* root) {
+        vector<double> ret;
+        if(root == NULL)
+            return ret;
+        list<TreeNode *> queue;
+        int curSize = 1;
+        int nextSize = 0;
+        TreeNode* tmp = root;
+        queue.push_back(tmp);
+        while(queue.size())
+        {
+            double sum = 0.0;
+            for(int i=0; i<curSize; i++)
+            {
+                tmp = queue.front();
+                queue.pop_front();
+                sum += tmp->val;
+                if(tmp->left)
+                {
+                    queue.push_back(tmp->left);
+                    nextSize ++;
+                }
+                if(tmp->right)
+                {
+                    queue.push_back(tmp->right);
+                    nextSize ++;
+                }
+            }
+            ret.push_back(sum/curSize);
+            curSize = nextSize;
+            nextSize = 0;
+        }
+        return ret;
+    }
 };
