@@ -1,0 +1,11 @@
+#define MIN(a, b) (a) < (b) ? (a) : (b)
+
+int maxCount(int m, int n, int** ops, int opsRowSize, int opsColSize) {
+    int a = m, b=n;
+    for(int i=0; i<opsRowSize; i++)
+    {
+        a = MIN(a, ops[i][0]);
+        b = MIN(b, ops[i][1]);
+    }
+    return a*b;
+}
