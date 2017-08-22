@@ -1,0 +1,15 @@
+bool judgeCircle(char* moves) {
+    int step[26];
+    memset(step, 0, sizeof(step));
+    char *p = moves;
+    while(*p != '\0')
+    {
+        step[*p - 'A']++;
+        p++;
+    }
+    
+    if(step['U'-'A'] == step['D'-'A'] && step['L'-'A'] == step['R'-'A'] )
+        return true;
+    else
+        return false;
+}
