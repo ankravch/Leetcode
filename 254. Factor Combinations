@@ -1,0 +1,27 @@
+class Solution {
+public:
+    void getFactors(vector<vector<int>> &res, vector<int> &factors, int n)
+    {
+        int i= factors.size() ? factors.back() : 2;
+        for(; i<=n/i; i++)
+        {
+            if(n % i == 0)
+            {
+                factors.push_back(i);
+                factors.push_back(n/i);
+                res.push_back(factors);
+                factors.pop_back();
+                getFactors(res, factors, n/i);
+                factors.pop_back();
+            }
+        }
+    }
+    
+    
+    vector<vector<int>> getFactors(int n) {
+        vector<vector<int>> res;
+        vector<int> factors;
+        getFactors(res, factors, n);
+        return res;
+    }
+};
