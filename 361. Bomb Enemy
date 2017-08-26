@@ -1,0 +1,74 @@
+class Solution {
+public:
+    
+int killEnemies(vector<vector<char>> &grid, int x, int y, int m, int n)
+{
+	int enemies = 0;
+	int i=1;
+	//left
+	while(true)
+	{
+		if(y-i <0 ||grid[x][y-i] == 'W')
+			break;
+		else if(grid[x][y-i] == 'E')
+			enemies++;
+		i++;
+	}
+    
+	i=1;
+	//right
+	while(true)
+	{
+		if(y+i >=n ||grid[x][y+i] == 'W')
+			break;
+		else if(grid[x][y+i] == 'E')
+			enemies++;
+		i++;
+	}
+
+	i=1;
+	//up
+	while(true)
+	{
+		if(x-i <0 ||grid[x-i][y] == 'W')
+			break;
+		else if(grid[x-i][y] == 'E')
+			enemies++;
+		i++;
+	}
+
+	i=1;
+	//down
+	while(true)
+	{
+		if(x+i >=m ||grid[x+i][y] == 'W')
+			break;
+		else if(grid[x+i][y] == 'E')
+			enemies++;
+		i++;
+	}
+    
+	return enemies;
+}
+    
+int maxKilledEnemies(vector<vector<char>>& grid) {
+    if(grid.size() == 0)
+        return 0;
+    int row = grid.size();
+	int col = grid[0].size();
+	int res = 0;
+
+	for(int i=0; i<row; i++)
+	{
+		for(int j=0; j<col; j++)
+		{
+			if(grid[i][j] == '0')
+			{
+				int ret = killEnemies(grid, i, j, row, col);
+				res = max(res, ret);
+			}
+		}
+	}
+	return res;
+    }
+};
