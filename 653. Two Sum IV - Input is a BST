@@ -1,0 +1,37 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void preorder(TreeNode* root, vector<int> &help)
+    {
+        if(root)
+        {
+            preorder(root->left, help);
+            help.push_back(root->val);
+            preorder(root->right, help);
+        }
+    }
+    
+    bool findTarget(TreeNode* root, int k) {
+        vector<int> help;
+        preorder(root, help);
+        int i=0, j=help.size()-1;
+        for(;i<j;)
+        {
+            if(help[i]+help[j]>k)
+                j--;
+            else if(help[i]+help[j]<k)
+                i++;
+            else
+                return true;
+        }
+        return false;
+    }
+};
