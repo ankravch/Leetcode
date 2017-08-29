@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int maximumProduct(vector<int>& nums) {
+        if(nums.size() == 3)
+            return nums[0]*nums[1]*nums[2];
+        int len = nums.size();
+        sort(nums.begin(), nums.end());
+        
+        int largest = nums.back();
+        if(largest < 0)
+            return nums[len-1]*nums[len-2]*nums[len-3];
+        else if(largest == 0)
+            return 0;
+        else
+            return max(nums[0]*nums[1], nums[len-2]*nums[len-3])*largest;
+    }
+};
