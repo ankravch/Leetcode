@@ -1,0 +1,24 @@
+class MapSum {
+public:
+    /** Initialize your data structure here. */
+    map<string, int> store;
+    MapSum() {
+        
+    }
+    
+    void insert(string key, int val) {
+        store[key] = val;
+    }
+    
+    int sum(string prefix) {
+        int sum = 0;
+        map<string, int>::iterator it=store.begin();
+        for(;it!=store.end();it++)
+        {
+            size_t found = it->first.find(prefix);
+            if(found == 0)
+                sum += it->second;
+        }
+        return sum;
+    }
+};
