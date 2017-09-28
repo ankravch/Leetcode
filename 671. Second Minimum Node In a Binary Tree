@@ -1,0 +1,30 @@
+class Solution {
+public:
+    void findSecondMinimumValue(TreeNode* root, int l, int& r, int & ret)
+    {
+        if(root)
+        {
+            if(root->val < r && root->val > l)
+            {
+                ret = root->val;
+                r = ret;
+            }
+            else
+            {
+                findSecondMinimumValue(root->left, l, r, ret);
+                findSecondMinimumValue(root->right, l, r, ret);
+            }
+        }
+    }
+    
+    int findSecondMinimumValue(TreeNode* root) {
+        int l = root->val;
+        int ret = l;
+        int r = INT_MAX;
+        findSecondMinimumValue(root, l, r, ret);
+        if(ret == l)
+            return -1;
+        else
+            return ret;
+    }
+};
