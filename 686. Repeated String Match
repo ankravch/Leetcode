@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int repeatedStringMatch(string A, string B) {
+        int aLen = A.length();
+        int bLen = B.length();
+        string tmp = A;
+        int tLen = aLen;
+        int count = 1;
+        while(tLen < bLen)
+        {
+            tmp += A;
+            count++;
+            tLen += aLen;
+        }
+        if(tmp.find(B) != string::npos) return count;
+        tmp += A;
+        count++;
+        if(tmp.find(B) != string::npos) return count;
+        return -1;
+    }
+};
