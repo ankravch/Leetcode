@@ -1,0 +1,22 @@
+class Solution {
+public:
+    bool hasAlternatingBits(int n) {
+        
+        vector<int> res;
+        while(n)
+        {
+            int remain = n%2;
+            res.push_back(remain);
+            n = n/2;
+        }
+        
+        int i=0, j=i+1;
+        for(; j<res.size(); i++, j++)
+        {
+            if(res[i] == res[j])
+                return false;
+        }
+        
+        return true;
+    }
+};
