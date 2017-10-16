@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int findShortestSubArray(vector<int>& nums) {
+        map<int, vector<int>>help;
+        int freq = 0;
+        int ret = INT_MAX;
+        for(int i=0; i<nums.size(); i++)
+        {
+            int key = nums[i];
+            if(help.find(key) == help.end())
+            {
+                vector<int> tmp;
+                help[key] = tmp;
+            }
+            help[key].push_back(i);
+            int _size = help[key].size();
+            freq = max(freq, _size);
+        }
+        for(map<int, vector<int>>::iterator it=help.begin(); it!=help.end(); it++)
+        {
+            if(it->second.size() == freq)
+            {
+                vector<int> tmp = it->second;
+                ret = min(ret, tmp[tmp.size()-1]-tmp[0]+1);
+            }
+        }
+        return ret;
+    }
+};
