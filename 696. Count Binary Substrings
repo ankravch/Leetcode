@@ -1,0 +1,30 @@
+class Solution {
+public:
+    void countBinarySubstrings(string &s, int i, int j, int &ret)
+    {
+        int pre_i = i-1;
+        int n_j = j+1;
+        while(true)
+        {
+            if(pre_i<0 || n_j>=s.length() || s[pre_i] != s[i] || s[j]!=s[n_j])
+                return;
+            ret++;
+            pre_i--;
+            n_j++;
+        }
+    }
+    
+    int countBinarySubstrings(string s) {
+        int i=0, j=i+1;
+        int ret = 0;
+        for(;j<s.length(); i++, j++)
+        {
+            if(s[i] != s[j])
+            {
+                ret++;
+                countBinarySubstrings(s, i, j, ret);
+            }
+        }
+        return ret;
+    }
+};
