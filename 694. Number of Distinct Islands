@@ -1,0 +1,43 @@
+class Solution {
+public:
+    
+    int numDistinctIslands(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        int ret = 0;
+        unordered_set<string> help;
+        
+        vector<vector<int>> visited(row, vector<int>(col, 0));
+        for(int i=0; i<row; i++)
+        {
+            for(int j=0; j<col; j++)
+            {
+                if(grid[i][j] == 1 && visited[i][j] == 0 )
+                {
+                    string s = "";
+                    find_island(grid, visited, i, j, row, col, 0, s);
+                    if(help.find(s) == help.end())
+                        help.insert(s);
+                }
+            }
+        }
+        
+        return help.size();
+    }
+    
+    void find_island(vector<vector<int>>& grid, vector<vector<int>> &visited, int x, int y, int row, int col, int di, string &s)
+    {
+        if(x<0 ||x>=row ||y<0 || y>=col)
+            return;
+        if(grid[x][y] == 0 || visited[x][y] == 1)
+            return;
+        visited[x][y] = 1;
+        s += to_string(di);
+        
+        find_island(grid, visited, x-1, y, row, col, 1, s);
+        find_island(grid, visited, x+1, y, row, col, 2, s);
+        find_island(grid, visited, x, y-1, row, col, 3, s);
+        find_island(grid, visited, x, y+1, row, col, 4, s);
+        s += to_string(-1);
+    } 
+};
