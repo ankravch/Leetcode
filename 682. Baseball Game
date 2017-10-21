@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int calPoints(vector<string>& ops) {
+        int sum = 0;
+        vector<int> val;
+        for(int i=0; i<ops.size(); i++)
+        {
+            int cur = val.size()-1;
+            if(ops[i] == "+")
+            {
+                    int tVal = val[cur]+val[cur-1];
+                    val.push_back(tVal);
+                    sum += tVal;
+            }
+            else if(ops[i] == "D")
+            {
+                    int tVal = 2*val[cur];
+                    sum += tVal;
+                    val.push_back(tVal);
+            }
+            else if(ops[i] == "C")
+            {
+                    int tVal = val[cur];
+                    sum -= tVal;
+                    val.resize(cur);
+            }
+            else
+            {
+                    int tVal = stoi(ops[i]);
+                    sum += tVal;
+                    val.push_back(tVal);
+            }
+        }
+        return sum;
+    }
+};
