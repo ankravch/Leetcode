@@ -1,0 +1,109 @@
+struct dl_list{
+    struct dl_list *next;
+    struct dl_list *prev;
+};
+
+typedef struct {
+    struct dl_list list;
+    int val;
+} MaxStack;
+
+
+/** initialize your data structure here. */
+MaxStack* maxStackCreate(int maxSize) {
+    struct dl_list* head = (struct dl_list*)calloc(1, sizeof(struct dl_list));
+    head->next = head;
+    head->prev = head;
+    return (MaxStack*)head;
+}
+
+void _add_node(struct dl_list* _new, struct dl_list* prev, struct dl_list* next)
+{
+    prev->next = _new;
+    _new->prev = prev;
+    _new->next = next;
+    next->prev = _new;
+}
+
+void _del_node(struct dl_list* prev, struct dl_list* next)
+{
+    prev->next = next;
+    next->prev = prev;
+}
+    
+void maxStackPush(MaxStack* obj, int x) {
+    MaxStack* tmp = (MaxStack*)calloc(1, sizeof(MaxStack));
+    tmp->val = x;
+    tmp->list.next = &(tmp->list);
+    tmp->list.prev = &(tmp->list);
+    struct dl_list *dlist = (struct dl_list*)obj;
+    _add_node(&(tmp->list), dlist, dlist->next);
+}
+
+int maxStackPop(MaxStack* obj) {
+    struct dl_list* dlist = (struct dl_list*)obj;
+    struct dl_list* tmp = dlist->next;
+    _del_node(dlist, tmp->next);
+    int ret = ((MaxStack*)tmp)->val;
+    free(tmp);
+    tmp = NULL;
+    return ret;
+}
+
+int maxStackTop(MaxStack* obj) {
+    struct dl_list* dlist = (struct dl_list*)obj;
+    struct dl_list* tmp = dlist->next;
+    return ((MaxStack*) tmp)->val;
+}
+
+int maxStackPeekMax(MaxStack* obj) {
+    struct dl_list* dlist = (struct dl_list*)obj;
+    struct dl_list* tmp = dlist->next;
+    MaxStack* max = (MaxStack* )tmp;
+    while((MaxStack*)tmp!=obj)
+    {
+        if(((MaxStack*) tmp)->val > max->val)
+            max = (MaxStack*) tmp;
+        tmp = tmp->next;
+    }
+    return max->val;
+}
+
+int maxStackPopMax(MaxStack* obj) {
+    struct dl_list* dlist = (struct dl_list*)obj;
+    struct dl_list* tmp = dlist->next;
+    MaxStack* max = (MaxStack* )tmp;
+    while((MaxStack*)tmp!=obj)
+    {
+        if(((MaxStack*) tmp)->val > max->val)
+            max = (MaxStack*) tmp;
+        tmp = tmp->next;
+    }
+    _del_node(((struct dl_list*)max)->prev, ((struct dl_list*)max)->next);
+    int ret = max->val;
+    free(max);
+    max = NULL;
+    return ret;
+}
+
+void maxStackFree(MaxStack* obj) {
+    struct dl_list* dlist = (struct dl_list*)obj;
+    struct dl_list* tmp = dlist->next;
+    while((MaxStack*)tmp != obj)
+    {
+        _del_node((struct dl_list*)obj, tmp->next);
+        free(tmp);
+        tmp = dlist->next;
+    }
+}
+
+/**
+ * Your MaxStack struct will be instantiated and called as such:
+ * struct MaxStack* obj = maxStackCreate(maxSize);
+ * maxStackPush(obj, x);
+ * int param_2 = maxStackPop(obj);
+ * int param_3 = maxStackTop(obj);
+ * int param_4 = maxStackPeekMax(obj);
+ * int param_5 = maxStackPopMax(obj);
+ * maxStackFree(obj);
+ */
