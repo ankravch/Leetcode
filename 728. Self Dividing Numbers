@@ -1,0 +1,23 @@
+class Solution {
+public:
+    bool isSelfDividingNumbers(int num)
+    {
+        int _num = num;
+        while(num)
+        {
+            int remain = num % 10;
+            if(remain == 0 || _num % remain)
+                return false;
+            num = num / 10;
+        }
+        return true;
+    }
+    
+    vector<int> selfDividingNumbers(int left, int right) {
+        vector<int> ret;
+        for(int i=left; i<=right; i++)
+            if(isSelfDividingNumbers(i))
+                ret.push_back(i);
+        return ret;
+    }
+};
