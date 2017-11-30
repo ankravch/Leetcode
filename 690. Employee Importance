@@ -1,0 +1,35 @@
+/*
+// Employee info
+class Employee {
+public:
+    // It's the unique ID of each node.
+    // unique id of this employee
+    int id;
+    // the importance value of this employee
+    int importance;
+    // the id of direct subordinates
+    vector<int> subordinates;
+};
+*/
+class Solution {
+public:
+    int getImportance(vector<Employee*> employees, int id) {
+        int importance = 0;
+        int i=0;
+        for(; i<employees.size(); i++)
+        {
+            if(id == employees[i]->id)
+            {
+                importance += employees[i]->importance;
+                break;
+            }
+        }
+        
+        if(employees[i]->subordinates.size() == 0)
+            return employees[i]->importance;
+        
+        for(int j=0; j<employees[i]->subordinates.size(); j++)
+           importance += getImportance(employees, (employees[i]->subordinates)[j]);
+        return importance;
+    }
+};
