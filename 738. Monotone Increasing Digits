@@ -1,0 +1,37 @@
+class Solution {
+public:
+bool monotoneIncreasingDigits(int N, int &bit)
+{
+    bool ret = true;
+    int remain = 10;
+    int count = 0;
+    while(N)
+    {
+        int _remain = N%10;
+        if(_remain> remain)
+        {
+            ret = false;
+            bit = count;
+        }
+        remain = _remain;
+        N = N /10;
+        count ++;
+    }
+    return ret;
+}
+
+int monotoneIncreasingDigits(int N) {
+    int bit = 0;
+    for(;N>0;)
+    {
+        if(monotoneIncreasingDigits(N, bit))
+            return N;
+        else
+        {
+            int m = pow(10, bit);
+            N = (N/m*m)-1;
+        }
+    }
+    return 0;
+}
+};
