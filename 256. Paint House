@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int minCost(vector<vector<int>>& costs) {
+        vector<int> ret(3, 0);
+        int min_r = 0, min_g = 0, min_b = 0;
+        for(int i=0; i<costs.size(); i++)
+        {
+            ret[0] = costs[i][0]+min(min_g, min_b);
+            ret[1] = costs[i][1]+min(min_r, min_b);
+            ret[2] = costs[i][2]+min(min_r, min_g);
+            min_r = ret[0];
+            min_g = ret[1];
+            min_b = ret[2];
+        }
+        return min(ret[0], min(ret[1], ret[2]));
+    }
+};
