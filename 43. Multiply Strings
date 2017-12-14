@@ -1,0 +1,45 @@
+void reverse_string(char *str, int len)
+{
+        if(len == 0)
+                return;
+        int i=0, j=len-1;
+        for(; i<=j; i++, j--)
+        {
+                char tmp = str[i];
+                str[i] = str[j];
+                str[j] = tmp;
+        }
+}
+
+char* multiply(char* num1, char* num2) {
+        int num1_l = strlen(num1);
+        int num2_l = strlen(num2);
+
+        reverse_string(num1, num1_l);
+        reverse_string(num2, num2_l);
+
+        char *ret = calloc(num1_l+num2_l+1, sizeof(char));
+
+        for(int i=0; i<num2_l; i++)
+        {
+                int carry = 0;
+                int j=0;
+                for(; j<num1_l; j++)
+                {
+                        int sum = (num2[i] - '0') * (num1[j] - '0') + carry + ret[i+j];
+                        int remain = sum % 10;
+                        ret[i+j] = remain;
+                        carry = sum / 10;
+                }
+                ret[i+j]= carry;
+        }
+
+        int len = num1_l+num2_l;
+        while(len && !ret[len-1])
+                len--;
+
+        reverse_string(ret, len);
+        for(int i=0; i<len || i==0; i++)
+                ret[i] += '0';
+        return ret;
+}
