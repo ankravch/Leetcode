@@ -1,0 +1,103 @@
+class Solution {
+public:
+    int L(int n)
+    {
+        return n*2+1;
+    }
+    
+    int R(int n)
+    {
+        return n*2+2;
+    }
+    
+    int P(int n)
+    {
+        return (n-1)/2;
+    }
+    
+    
+void update_M_Q(vector<int> &M_Q, int index, vector<int> &val)
+{
+    int cur = index;
+    int p_cur = P(cur);
+    
+    while(val[M_Q[cur]] < val[M_Q[p_cur]])
+    {
+        swap(M_Q[cur], M_Q[p_cur]);
+        cur = p_cur;
+        p_cur = P(cur);
+    }
+}
+
+void insert_M_Q(vector<int> &M_Q, int &M_size, int index, vector<int> &val)
+{
+    M_Q.push_back(index);
+    M_size++;
+    update_M_Q(M_Q, M_size-1, val);
+}
+    
+    void min_heap(vector<int> &M_Q, int &M_size, vector<int> &val, int index)
+    {
+        int l = L(index);
+        int r = R(index);
+        int smallest = index;
+        
+        if(l<M_size && val[M_Q[l]] < val[M_Q[index]])
+            smallest = l;
+        if(r<M_size && val[M_Q[r]] < val[M_Q[smallest]])
+            smallest = r;
+        if(smallest == index)
+            return;
+        swap(M_Q[smallest], M_Q[index]);
+        min_heap(M_Q, M_size, val, smallest);
+    }
+    
+    int extract_min(vector<int> &M_Q, int &M_size, vector<int> &val)
+    {
+        if(M_size > 0)
+        {
+            swap(M_Q[0], M_Q[M_size-1]);
+            M_size--;
+            min_heap(M_Q, M_size, val, 0);
+            return M_Q[M_size];
+        }
+    }
+
+    
+    int networkDelayTime(vector<vector<int>>& times, int N, int K) {
+
+        vector<int> val(N+1, INT_MAX);
+        vector<int> M_Q;
+        val[K] = 0;
+        int M_size = 0;
+        for(int i=1; i<=N; i++)
+            insert_M_Q(M_Q, M_size, i, val);
+
+        
+        while(M_size)
+        {
+            int min_index = extract_min(M_Q, M_size, val);
+            
+            for(int i=0; i<times.size(); i++)
+            {
+                if(times[i][0] == min_index && val[min_index]+times[i][2] < val[times[i][1]])
+                {
+                    val[times[i][1]] = val[min_index]+times[i][2];
+                    for(int j=0; j<M_size; j++)
+                        if(M_Q[j] == times[i][1])
+                            update_M_Q(M_Q, j, val);
+                }
+            }
+        }
+        
+        int ret = -1;
+        for(int i=1; i<=N; i++)
+        {
+            if(val[i] == INT_MAX)
+                return -1;
+            ret = max(ret, val[i]);
+        }
+        return ret;
+    }
+    
+};
