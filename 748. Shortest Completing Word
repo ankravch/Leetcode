@@ -1,0 +1,46 @@
+class Solution {
+public:
+    bool isValidate(vector<int>letter, string word)
+    {
+        for(int i=0; i<word.length(); i++)
+        {
+            letter[word[i]-'a']--;
+        }
+        for(int i=0; i<26; i++)
+        {
+            if(letter[i]> 0)
+                return false;
+        }
+        return true;
+    }
+    
+    string shortestCompletingWord(string licensePlate, vector<string>& words) {
+        vector<int>letter(26, 0);
+        vector<vector<string>> help;
+        for(int i=0; i<1001; i++)
+        {
+            vector<string> str;
+            help.push_back(str);
+        }
+        for(int i=0; i<licensePlate.length(); i++)
+        {
+            if(!isalpha(licensePlate[i]))
+                continue;
+            letter[tolower(licensePlate[i])-'a']++;
+        }
+        for(int i=0; i<words.size(); i++)
+        {
+            if(isValidate(letter, words[i]))
+            {
+                int len = words[i].length();
+                help[len].push_back(words[i]);
+            }
+        }
+        for(int i=0; i<1001;i++)
+        {
+            if(help[i].size() != 0)
+                return help[i][0];
+        }
+        return "";
+    }
+};
