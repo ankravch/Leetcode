@@ -1,0 +1,72 @@
+class Solution {
+public:
+    
+string int_to_str_ip(unsigned int ip)
+{
+    string str = "";
+    str += to_string((ip>>24) & 0xff);
+    str += '.';
+    str += to_string((ip>>16) & 0xff);
+    str += '.';
+    str += to_string((ip>>8) & 0xff);
+    str += '.';
+    str += to_string(ip & 0xff);
+    return str;
+}
+    
+unsigned int ip_to_un_int(string s)
+{
+    int i = 0, j =0;
+    unsigned int ret = 0;
+    for(; j<s.length(); j++)
+    {
+        if((s[j] == '.' && i != j) || (j == s.length()-1))
+        {
+            string str = "";
+            if(j == s.length()-1)
+                str = s.substr(i, j-i+1);
+            else
+                str = s.substr(i, j-i);
+            ret = ((ret<<8) | stoi(str));
+            i = j+1;
+        }
+    }
+    return ret;
+}
+
+void ipToCIDR(unsigned int _ip, int n, vector<string> &ret)
+{
+    if(n == 0)
+        return;
+    
+    
+    unsigned int ip = _ip;
+    for(int i=1; i<=32; i++)
+    {
+        string str = "";
+        if((ip & 0x1) || (n>=(1<<(i-1)) && n<(1<<i)))
+        {
+            int count = 1<<(i-1);
+            str += int_to_str_ip(_ip);
+            str += '/';
+            str += to_string(32 - (i-1));
+            ret.push_back(str);
+            _ip += count;
+            n -= count;
+            ipToCIDR(_ip, n, ret);
+            break;
+        }
+        else
+        {
+            ip >>= 1;
+        }
+    }
+}
+
+vector<string> ipToCIDR(string ip, int n) {
+    vector<string> ret;
+    unsigned int _ip = ip_to_un_int(ip);
+    ipToCIDR(_ip, n, ret);
+    return ret;
+}
+};
