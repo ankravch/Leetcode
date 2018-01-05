@@ -1,0 +1,61 @@
+class Solution {
+public:
+    struct POS{
+        int x;
+        int y;
+        POS(int _x, int _y) {x = _x; y = _y;}
+    };
+    
+    vector<POS> pos;
+    
+    Solution()
+    {
+        pos.push_back(POS(0, 0));
+        pos.push_back(POS(0, 1));
+        pos.push_back(POS(0, -1));
+        pos.push_back(POS(-1, 0));
+        pos.push_back(POS(1, 0));
+        pos.push_back(POS(-1, -1));
+        pos.push_back(POS(-1, 1));
+        pos.push_back(POS(1, -1));
+        pos.push_back(POS(1, 1));
+    }
+    
+    int cal_scale(int x, int y, int row, int col, vector<vector<int>>& M)
+    {
+        int sum = 0;
+        int _size = 0;
+        for(int i=0; i<9; i++)
+        {
+            
+            int _x = x + pos[i].x;
+            int _y = y + pos[i].y;
+            if(_x < 0 || _y < 0 || _x >= row || _y >= col)
+                continue;
+            sum += M[_x][_y];
+            _size ++;
+        }
+        return sum/_size;
+    }
+    
+    vector<vector<int>> imageSmoother(vector<vector<int>>& M) {
+        vector<vector<int>> ret;
+        int row = M.size();
+        if(!row)
+            return ret;
+        int col = M[0].size();
+        if(!col)
+            return ret;
+        
+        for(int i=0; i<row; i++)
+        {
+            vector<int> tmp;
+            for(int j=0; j<col; j++)
+            {
+                tmp.push_back(cal_scale(i, j, row, col, M));
+            }
+            ret.push_back(tmp);
+        }
+        return ret;
+    }
+};
