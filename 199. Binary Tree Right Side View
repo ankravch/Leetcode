@@ -1,0 +1,31 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void rightSideView(TreeNode* root, vector<int> &ret, unordered_set<int> &help, int height) {
+        if(root)
+        {
+            if(help.count(height) == 0)
+            {
+                ret.push_back(root->val);
+                help.insert(height);
+            }
+            rightSideView(root->right, ret, help, height+1);
+            rightSideView(root->left, ret, help, height+1);
+        }
+    }
+    
+    vector<int> rightSideView(TreeNode* root) {
+        unordered_set<int> help;
+        vector<int> ret;
+        rightSideView(root, ret, help, 0);
+        return ret;
+    }
+};
