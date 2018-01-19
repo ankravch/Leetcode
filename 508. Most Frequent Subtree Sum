@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int findFrequentTreeSum(TreeNode* root, map<int, int> &help, int *largest)
+    {
+        if(root == NULL)
+            return 0;
+        int l = findFrequentTreeSum(root->left, help, largest);
+        int r = findFrequentTreeSum(root->right, help, largest);
+        int sum = root->val + l + r;
+        if(help.find(sum) == help.end())
+            help[sum] = 1;
+        else
+            help[sum]++;
+        *largest = max(*largest, help[sum]);
+        return sum;
+    }
+    
+    vector<int> findFrequentTreeSum(TreeNode* root) {
+        map<int, int> help;
+        vector<int> ret;
+        int largest = 0;
+        findFrequentTreeSum(root, help, &largest);
+        map<int, int>::iterator it=help.begin();
+        for(;it!=help.end();it++)
+            if(it->second == largest)
+                ret.push_back(it->first);
+        return ret;
+    }
+};
