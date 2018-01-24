@@ -1,0 +1,54 @@
+class Solution {
+public:
+    
+/*    void reconstructQueue(vector<pair<int, int>>& people, vector<pair<int, int>> &ret, vector<bool> &visited)
+    {
+        while(people.size() != ret.size())
+        {
+            int i=0;
+            for(; i<people.size(); i++)
+            {
+                if(visited[i])
+                    continue;
+                int f = people[i].first;
+                int s = people[i].second;
+                int count = 0;
+                for(int j=0; j<ret.size(); j++)
+                {
+                    if(ret[j].first >= f)
+                        count++;
+                }
+                if(count == s)
+                    break;
+            }
+            ret.push_back(people[i]);
+            visited[i] = true;
+        }
+    }
+    
+    static bool cmp(pair<int, int>a, pair<int, int>b)
+    {
+        return a.first < b.first;
+    }
+    
+    vector<pair<int, int>> reconstructQueue(vector<pair<int, int>>& people) {
+        vector<pair<int, int>> ret;
+        vector<bool> visited(people.size(), false);
+        sort(people.begin(), people.end(), cmp);
+        reconstructQueue(people, ret, visited);
+        return ret;
+    } */
+    
+    static bool cmp(pair<int, int>a, pair<int, int>b)
+    {
+        return a.first > b.first || (a.first == b.first && a.second < b.second);
+    }
+    
+    vector<pair<int, int>> reconstructQueue(vector<pair<int, int>>& people) {
+        vector<pair<int, int>> ret;
+        sort(people.begin(), people.end(), cmp);
+        for(int i=0; i<people.size(); i++)
+            ret.insert(ret.begin()+people[i].second, people[i]);
+        return ret;
+    }
+};
