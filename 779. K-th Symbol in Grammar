@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int kthGrammar(int N, int K) {
+        int ret = 0;
+        int len;
+        while(N>1)
+        {
+            len = 1<<(N-1);
+            if(K > len/2)
+            {
+                K -= len/2;
+                ret ^= 1;
+            }
+            N--;
+        }
+        return ret;
+    }
+};
