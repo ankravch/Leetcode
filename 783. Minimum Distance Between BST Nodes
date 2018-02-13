@@ -1,0 +1,30 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void minDiffInBST(struct TreeNode* root, struct TreeNode** pre, int *ret)
+    {
+        if(root)
+        {
+            minDiffInBST(root->left, pre, ret);
+            if(*pre)
+                *ret = min(*ret, abs(root->val - (*pre)->val));
+            *pre = root;
+            minDiffInBST(root->right, pre, ret);
+        }
+    }
+
+    int minDiffInBST(struct TreeNode* root) {
+        int ret = INT_MAX;
+        struct TreeNode* p = NULL;
+        minDiffInBST(root, &p, &ret);
+        return ret;
+    }
+};
