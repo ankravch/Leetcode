@@ -1,0 +1,27 @@
+class Solution {
+public:
+    string customSortString(string S, string T) {
+        unsigned char help[255];
+        memset(help, 0, 255);
+        for(int i=0; i<T.length(); i++)
+            help[T[i]]++;
+        string ret = "";
+        for(int i=0; i<S.length(); i++)
+        {
+            while(help[S[i]] > 0)
+            {
+                ret += S[i];
+                help[S[i]]--;
+            }
+        }
+        for(int i=0; i<255; i++)
+        {
+            while(help[i] > 0)
+            {
+                ret += (char)i;
+                help[i]--;
+            }
+        }
+        return ret;
+    }
+};
