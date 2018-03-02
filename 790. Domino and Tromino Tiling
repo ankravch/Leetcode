@@ -1,0 +1,16 @@
+class Solution {
+public:
+    
+    int numTilings(int N) {
+        vector<long long>help(N+1, 0);
+        int mod = 1000000007;
+        help[0] = 1;
+        help[1] = 1;
+        help[2] = 2;
+        if(N<3)
+            return help[N];
+        for(int i=3; i<=N; i++)
+            help[i] = (2*help[i-1] + help[i-3])%mod;
+        return help[N];
+    }
+};
