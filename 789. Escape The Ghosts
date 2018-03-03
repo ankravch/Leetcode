@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool escapeGhosts(vector<vector<int>>& ghosts, vector<int>& target) {
+        int ret = INT_MAX;
+        for(int i=0; i<ghosts.size(); i++)
+        {
+            ret = min(ret, abs(ghosts[i][0]-target[0])+abs(ghosts[i][1]-target[1]));
+        }
+        int user = abs(target[0])+abs(target[1]);
+        if(user < ret)
+            return true;
+        else
+            return false;
+    }
+};
