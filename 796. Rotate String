@@ -1,0 +1,9 @@
+class Solution {
+public:
+    bool rotateString(string A, string B) {
+        string tmp = A+A;
+        if(tmp.find(B) == string::npos)
+            return false;
+        return true;
+    }
+};
