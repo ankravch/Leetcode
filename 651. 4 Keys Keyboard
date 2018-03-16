@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int maxA(int N) {
+        vector<int> help(N+1, 0);
+        help[1] = 1;
+        for(int i=2; i<=N; i++)
+        {
+            int ret = help[i-1]+1;
+            int count = 2;
+            for(int j=i-3; j>=0; j--, count++)
+                ret = max(ret, help[j]*count);
+            help[i] = ret;
+        }
+        return help[N];
+    }
+};
