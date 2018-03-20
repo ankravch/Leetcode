@@ -1,0 +1,21 @@
+class Solution {
+public:
+    string help(int a)
+    {
+        string ret = "";
+        int num = (a/17) + (a%17 > 8?1:0);
+        char c = num > 9 ? (num -10 + 'a') : ('0' + num);
+        return ret + c+ c;
+    }
+    
+    string similarRGB(string color) {
+        int r = stoi(color.substr(1,2), nullptr, 16);
+        int g = stoi(color.substr(3,2), nullptr, 16);
+        int b = stoi(color.substr(5,2), nullptr, 16);
+        string ret = "#";
+        ret += help(r);
+        ret += help(g);
+        ret += help(b);
+        return ret;
+    }
+};
