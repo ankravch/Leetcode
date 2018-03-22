@@ -1,0 +1,61 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int least, most;
+    
+    Solution()
+    {
+        least = INT_MAX;
+        most = INT_MIN;
+    }
+    
+    void verticalOrder(TreeNode* root, int index, map<int, vector<int>>& help)
+    {
+        queue<pair<TreeNode*, int>> tmp;
+        if(!root)
+            return;
+        
+        tmp.push(make_pair(root, index));
+        while(tmp.size())
+        {
+            TreeNode* node = tmp.front().first;
+            index = tmp.front().second;
+            tmp.pop();
+            least = min(index, least);
+            most = max(index, most);
+            if(help.find(index) == help.end())
+            {
+                vector<int> vtmp;
+                help[index] = vtmp;
+            }
+            help[index].push_back(node->val);
+            if(node->left)
+            {
+                tmp.push(make_pair(node->left, index-1));
+            }
+            if(node->right)
+            {
+                tmp.push(make_pair(node->right, index+1));
+            }
+        }
+    }
+    
+    vector<vector<int>> verticalOrder(TreeNode* root) {
+        map<int, vector<int>> help;
+        vector<vector<int>> ret;
+        verticalOrder(root, 0, help);
+        for(int i=least; i<=most; i++)
+        {
+            ret.push_back(help[i]);
+        }
+        return ret;
+    }
+};
