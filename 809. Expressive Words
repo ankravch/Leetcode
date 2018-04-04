@@ -1,0 +1,29 @@
+class Solution {
+public:
+int expressiveWords(string S, vector<string>& words) {
+    int ret = 0;
+    for(int i=0; i<words.size(); i++)
+    {
+        int S_i = 0, S_j = 0;
+        string tmp = words[i];
+        int t_i = 0, t_j = 0;
+        while(true)
+        {
+            while(S_j < S.length() && S[S_j] == S[S_i]) S_j++;
+            while(t_j < tmp.length() && tmp[t_j] == tmp[t_i]) t_j++;
+            if(S[S_i] != tmp[t_i] || (t_j-t_i > S_j-S_i) || (t_j-t_i != S_j-S_i && S_j-S_i < 3))
+                break;
+            if(S_j == S.length() && t_j != tmp.length() || t_j == tmp.length() && S_j != S.length())
+                break;
+            if(S_j == S.length() && t_j == tmp.length())
+            {
+                ret++;
+                break;
+            }
+            S_i = S_j;
+            t_i = t_j;
+        }
+    }
+    return ret;
+  }
+};
