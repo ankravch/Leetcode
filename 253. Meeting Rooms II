@@ -1,0 +1,51 @@
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+class Solution {
+public:
+    static bool cmp(Interval a, Interval b)
+    {
+        if(a.start < b.start)
+            return true;
+        else if(a.start == b.start)
+        {
+            if(a.end <= b.end)
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+    
+    int minMeetingRooms(vector<Interval>& intervals) {
+        vector<vector<Interval>> ret;
+        sort(intervals.begin(), intervals.end(), cmp);
+        for(int i=0; i<intervals.size(); i++)
+        {
+            int j=0;
+            for(; j<ret.size(); j++)
+            {
+                Interval tmp = ret[j].back();
+                if(intervals[i].start >= tmp.end || intervals[i].end <= tmp.start)
+                {
+                    ret[j].push_back(intervals[i]);
+                    break;
+                }
+            }
+            if(j >= ret.size())
+            {
+                vector<Interval> tmp;
+                tmp.push_back(intervals[i]);
+                ret.push_back(tmp);
+            }
+        }
+        return ret.size();
+    }
+};
