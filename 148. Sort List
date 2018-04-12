@@ -1,0 +1,90 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeList(ListNode* l, ListNode* r, ListNode* next_r, ListNode** last)
+    {
+        ListNode dummy(0);
+        ListNode* tmp = &dummy;
+        while(l && r)
+        {
+            if(l->val <= r->val)
+            {
+                tmp->next = l;
+                l = l->next;
+            }
+            else
+            {
+                tmp->next = r;
+                r = r->next;
+            }
+            tmp = tmp->next;
+        }
+        if(l)
+            tmp->next = l;
+        if(r)
+            tmp->next = r;
+        
+        while(tmp)
+        {
+            *last = tmp;
+            tmp = tmp->next;
+        }
+        (*last)->next = next_r;
+        return dummy.next;
+    }
+    
+    ListNode* nextNode(ListNode* start, int n, ListNode **pre_l)
+    {
+        while(n && start)
+        {
+            n--;
+            (*pre_l) = start;
+            start = start->next;
+        }
+        return start;
+    }
+    
+    
+    ListNode* sortList(ListNode* head) {
+        if(!head || !head->next)
+            return head;
+        int len = 0;
+        ListNode* cur = head;
+        while(cur)
+        {
+            len++;
+            cur = cur->next;
+        }
+        
+        ListNode dummy(0);
+        dummy.next = head;
+        for(int i=1; i<len; i*=2)
+        {
+            ListNode* l = dummy.next;
+            ListNode* pre_l = &dummy;
+            while(l)
+            {
+                ListNode* tmp = NULL; 
+                ListNode* r= nextNode(l, i, &tmp);
+                if(tmp)
+                    tmp->next = NULL;
+                ListNode* next_r = NULL;
+                if(r)
+                    next_r = nextNode(r, i, &tmp);
+                if(tmp)
+                    tmp->next = NULL;
+                pre_l->next = mergeList(l, r, next_r, &tmp);
+                pre_l = tmp;
+                l = next_r;
+            }
+        }
+        return dummy.next;
+    }
+};
