@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool isOneEditDistance(string s, string t) {
+        int i=0, j=0;
+        while(i<s.length() && j<t.length() &&s[i] == t[j])
+        {
+            i++;
+            j++;
+        }
+        if(i == s.length() && j == t.length()) return false;
+        if(s.length() == t.length()) return s.substr(i+1) == t.substr(j+1);
+        if(s.length() > t.length()) return s.substr(i+1) == t.substr(j);
+        else return t.substr(j+1) == s.substr(i);
+    }
+};
