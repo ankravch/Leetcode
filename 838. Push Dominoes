@@ -1,0 +1,39 @@
+class Solution {
+public:
+string pushDominoes(string dominoes) {
+    string ret = dominoes;
+	char l = '.';
+	int l_pos = -1;
+	for(int i=0; i<dominoes.length(); i++)
+	{
+		if(dominoes[i] == 'L')
+		{
+			if(l == 'R')
+			{
+				if((l_pos+i)%2 == 0)
+					ret[(l_pos+i)/2] = '.';
+				for(int k=(l_pos+i)/2+1; k<i; k++)
+					ret[k] = 'L';
+			}
+            else
+            {
+			    for(int k=l_pos+1; k<i; k++)
+					    ret[k] = 'L';
+            }
+			l = 'L';
+			l_pos = i;
+		}
+		else if(dominoes[i] == 'R')
+		{
+			l = 'R';
+			l_pos = i;
+		}
+		else
+		{
+			if(l == 'R')
+				ret[i] = 'R';
+		}
+	}
+	return ret;
+    }
+};
