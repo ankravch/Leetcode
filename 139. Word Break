@@ -1,0 +1,54 @@
+class Solution {
+public:
+/*    bool wordBreak(string s, unordered_set<string>& words, map<string, bool>& help)
+    {
+        if(s.length() == 0)
+            return true;
+        
+        if(help.find(s) != help.end())
+            return help[s];
+        
+        int ret = false;
+        for(int len = 1; len <= s.length(); len++)
+        {
+            string tmp = s.substr(0, len);
+            if(words.find(tmp) != words.end())
+                ret |= wordBreak(s.substr(len), words, help);
+        }
+        help[s] = ret;
+        return ret;
+    }
+    
+    bool wordBreak(string s, vector<string>& wordDict) {
+        if(s.length() == 0)
+            return false;
+        
+        unordered_set<string> words;
+        map<string, bool> help;
+        for(int i=0; i<wordDict.size(); i++)
+            words.insert(wordDict[i]);
+        
+        return wordBreak(s, words, help);
+    } */
+    
+    bool wordBreak(string s, vector<string>& wordDict) {
+        if(s.length() == 0)
+            return false;
+        
+        unordered_set<string> words;
+        for(int i=0; i<wordDict.size(); i++)
+            words.insert(wordDict[i]);
+        
+        vector<bool> ret(s.length()+1, false);
+        ret[0] = true;
+        for(int i=0; i<s.length(); i++)
+        {
+            for(int j=0; j<=i; j++)
+            {
+                string str = s.substr(j, (i-j+1));
+                ret[i+1] = ((ret[j] && (words.find(str) != words.end())) || ret[i+1]);
+            }
+        }
+        return ret[s.length()];
+    }
+};
