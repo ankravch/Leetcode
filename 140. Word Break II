@@ -1,0 +1,41 @@
+class Solution {
+public:
+
+    vector<string> wordBreak(string s, unordered_set<string>& words, map<string, vector<string>>& records)
+    {
+        if(records.find(s) != records.end())
+            return records[s];
+        
+        vector<string> tmp;
+        for(int len = 1; len<=s.length(); len++)
+        {
+            string str = s.substr(0, len);
+            if(words.find(str) != words.end())
+            {
+                string left = s.substr(len);
+                if(left.length() == 0)
+                {
+                    tmp.push_back(str);
+                    continue;
+                }
+                vector<string> pre = wordBreak(left, words, records);
+                for(int i=0; i<pre.size(); i++)
+                    tmp.push_back(str + " " + pre[i]);
+            }
+        }
+        records[s] = tmp;
+        return tmp;
+    }
+    
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        
+        unordered_set<string> words;
+
+        map<string, vector<string>> records;
+        for(int i=0; i<wordDict.size(); i++)
+            words.insert(wordDict[i]);
+        
+        return wordBreak(s, words, records);
+
+    }
+};
