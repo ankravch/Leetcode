@@ -1,0 +1,62 @@
+class Solution {
+public:
+    vector<string> digit = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
+    vector<string> tenth = {"Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+    vector<string> dec = {"", "","Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+    vector<string> unit = {"", "Thousand", "Million", "Billion"};
+    
+    string _numberToWords(int num)
+    {
+        if(num == 0)
+            return "";
+        else if(num<=9)
+            return (digit[num]);
+        else if(num>=10 && num<=19)
+            return (tenth[num-10]);
+        else if(num>=20 && num<=99)
+        {
+            int left = num - num/10*10;
+            if(left == 0)
+                return dec[num/10];
+            else
+                return (dec[num/10]+" "+numberToWords(num - num/10*10));
+        }
+        else
+        {
+            int left = num - num/100*100;
+            if(left == 0)
+                return digit[num/100] + " Hundred";
+            else
+                return (digit[num/100] + " Hundred " + numberToWords(num - num/100*100));
+        }
+    }
+    
+    string numberToWords(int num) {
+        string ret = "";
+        string str = "";
+        int count = 0;
+        if(num == 0)
+            return "Zero";
+        while(num)
+        {
+            int _num = num%1000;
+            if(count == 0)
+                str = _numberToWords(_num);
+            else
+            {
+                string tmp = _numberToWords(_num);
+                if(tmp != "")
+                {   
+                    if(ret == "")
+                        str = tmp +" " + unit[count];
+                    else
+                        str = tmp +" " + unit[count] + " " +ret;
+                }
+            }
+            ret = str;
+            count++;
+            num /= 1000;
+        }
+        return str;
+    }
+};
