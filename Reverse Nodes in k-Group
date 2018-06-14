@@ -1,0 +1,94 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseLinklist(ListNode* head)
+    {
+        if(head == NULL)
+            return head;
+        ListNode* pre = NULL;
+        ListNode* cur = head;
+        ListNode* right = cur->next;
+        while(cur)
+        {
+            cur->next = pre;
+            pre = cur;
+            cur = right;
+            if(cur)
+                right = cur->next;
+        }
+        return pre;
+    }
+    
+    bool hasK(ListNode* head, ListNode** next_t, int k)
+    {
+        int count = 0;
+        ListNode* tmp = head;
+        ListNode* pre = head;
+        while(count < k && tmp)
+        {
+            count++;
+            pre = tmp;
+            tmp = tmp->next;
+        }
+        (*next_t) = tmp;
+        pre->next = NULL;
+        if(count == k)
+            return true;
+        else
+            return false;
+    }
+    
+    ListNode* reverseKGroup(ListNode* head, int k) {
+/*        ListNode* tmp = head;
+        ListNode* pre = head;
+        int count = 0;
+        while(count < k && tmp)
+        {
+            count++;
+            pre = tmp;
+            tmp = tmp->next;
+        }
+        if(count < k)
+            return head;
+        else
+            pre->next = NULL;
+        
+        ListNode* reverse = reverseKGroup(tmp, k);
+        ListNode* ret = reverseLinklist(head);
+        head->next = reverse;
+        return ret; */
+        
+        ListNode* tmp = head;
+        ListNode* ret = NULL;
+        ListNode* last = NULL;
+        while(tmp)
+        {
+            ListNode* next_t = NULL;
+            if(hasK(tmp, &next_t, k))
+            {
+                ListNode* listH = reverseLinklist(tmp);
+                if(ret == NULL)
+                    ret = listH;
+                if(last != NULL)
+                    last->next = listH;
+                last = tmp;
+            }
+            else
+            {
+                if(ret == NULL)
+                    ret = tmp;
+                if(last != NULL)
+                    last->next = tmp;
+            }
+            tmp = next_t;
+        }
+        return ret;
+    }
+};
