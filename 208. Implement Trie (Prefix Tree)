@@ -1,0 +1,80 @@
+typedef struct {
+    bool end;
+    struct Trie *next[26];
+} Trie;
+
+/** Initialize your data structure here. */
+Trie* trieCreate() {
+    Trie* root = (Trie*) calloc(1, sizeof(Trie));
+    return root;
+}
+
+/** Inserts a word into the trie. */
+void trieInsert(Trie* obj, char* word) {
+    if(!obj || !word)
+        return;
+    char* p = word;
+    Trie* tmp = obj;
+    while(*p != '\0')
+    {
+        if((tmp->next)[*p - 'a'] == NULL)
+            (tmp->next)[*p - 'a'] = calloc(1, sizeof(Trie));
+        tmp = (tmp->next)[*p - 'a'];
+        p++;
+    }
+    tmp->end = true;
+}
+
+/** Returns if the word is in the trie. */
+bool trieSearch(Trie* obj, char* word) {
+    char* p = word;
+    Trie* tmp = obj;
+    while(*p != '\0')
+    {
+        if((tmp->next)[*p - 'a'] == NULL)
+            return false;
+        tmp = (tmp->next)[*p - 'a'];
+        p++;
+    }
+    if(tmp->end == true)
+        return true;
+    else
+        return false;
+}
+
+/** Returns if there is any word in the trie that starts with the given prefix. */
+bool trieStartsWith(Trie* obj, char* prefix) {
+    char* p = prefix;
+    Trie* tmp = obj;
+    while(*p != '\0')
+    {
+        if((tmp->next)[*p - 'a'] == NULL)
+            return false;
+        tmp = (tmp->next)[*p - 'a'];
+        p++;
+
+    }
+    return true;
+}
+
+void trieFree(Trie* obj) {
+    Trie* tmp = obj;
+    for(int i=0; i<26; i++)
+    {
+        if((tmp->next)[i] != NULL)
+        {
+            trieFree((tmp->next)[i]);
+            (tmp->next)[i] = NULL;
+        }
+    }
+    free(tmp);
+}
+
+/**
+ * Your Trie struct will be instantiated and called as such:
+ * struct Trie* obj = trieCreate();
+ * trieInsert(obj, word);
+ * bool param_2 = trieSearch(obj, word);
+ * bool param_3 = trieStartsWith(obj, prefix);
+ * trieFree(obj);
+ */
