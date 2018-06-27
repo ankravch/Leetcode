@@ -1,0 +1,30 @@
+class Solution {
+public:
+    string decodeString(string& s, int &i)
+    {
+        string ret = "";
+        int count = 0;
+        for(;i<s.length(); i++)
+        {
+            if(s[i]>='0' && s[i]<='9')
+                count = count*10+(s[i]-'0');
+            else if(s[i] == '[')
+            {
+                string tmp = decodeString(s, ++i);
+                for(int i=0; i<count; i++)
+                    ret += tmp;
+                count = 0;
+            }
+            else if(s[i] == ']')
+                return ret;
+            else
+                ret += s[i];
+        }
+        return ret;
+    }
+    
+    string decodeString(string s) {
+        int i=0;
+        return decodeString(s, i);
+    }
+};
