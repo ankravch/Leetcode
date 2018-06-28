@@ -1,0 +1,86 @@
+class Solution {
+public:
+/*    vector<int> pa;
+    vector<int> rank;
+    
+    int find(int n)
+    {
+        if(pa[n] != n)
+            pa[n] = find(pa[n]);
+        return pa[n];
+    }
+    
+    void union_set(int p, int q)
+    {
+        if(rank[p] > rank[q])
+            pa[q] = pa[p];
+        else
+        {
+            pa[p] = pa[q];
+            if(rank[p] == rank[q])
+                rank[q]++;
+        }
+    }
+    
+    
+    bool validTree(int n, vector<pair<int, int>>& edges) {
+        for(int i=0; i<n; i++)
+        {
+            pa.push_back(i);
+            rank.push_back(0);
+        }
+        
+        for(int i=0; i<edges.size(); i++)
+        {
+            if(find(edges[i].first) == find(edges[i].second))
+                return false;
+            union_set(find(edges[i].first), find(edges[i].second));
+        }
+        
+        for(int i=0; i<pa.size()-1; i++)
+            if(find(i) != find(i+1))
+                return false;
+        return true;
+    } */
+    
+    bool validTree(int n, vector<vector<int>> &graph, vector<bool> &visited, int p)
+    {
+        if(visited[n])
+            return false;
+        
+        visited[n] = true;
+        bool tmp = true;
+        for(int i=0; i<graph[n].size(); i++)
+        {
+            if(graph[n][i] == p)
+                continue;
+            tmp &= validTree(graph[n][i], graph, visited, n);
+            if(!tmp)
+                break;
+        }
+        return tmp;
+    }
+    
+    bool validTree(int n, vector<pair<int, int>>& edges) {
+        vector<vector<int>> graph(n);
+        vector<bool> visited(n, false);
+        for(int i=0; i<n; i++)
+        {
+            vector<int> tmp;
+            graph[i] = tmp;
+        }
+        
+        for(int i=0; i<edges.size(); i++)
+        {
+            graph[edges[i].first].push_back(edges[i].second);
+            graph[edges[i].second].push_back(edges[i].first);
+        }
+        
+        bool ret = validTree(0, graph, visited, -1);
+        for(int i=0; i<visited.size(); i++)
+            if(!visited[i])
+                return false;
+        
+        return ret;
+    }
+};
