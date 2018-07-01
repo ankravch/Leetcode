@@ -1,0 +1,85 @@
+class LRUCache {
+public:
+    struct node
+    {
+        int key;
+        int val;
+        struct node* next;
+        struct node* prev;
+    };
+    
+    int _capacity = 0;
+    int size = 0;
+    struct node *dummy;
+    map<int, struct node*> record;
+    
+    void list_add(struct node* list, struct node* item)
+    {
+        item->prev = list;
+        item->next = list->next;
+        list->next->prev = item;
+        list->next = item;
+    }
+    
+    void list_del(struct node* item)
+    {
+        item->prev->next = item->next;
+        item->next->prev = item->prev;
+    }
+    
+    LRUCache(int capacity) {
+        _capacity = capacity;
+        dummy = new node();
+        dummy->next = dummy;
+        dummy->prev = dummy;
+    }
+    
+    int get(int key) {
+        if(record.find(key) == record.end())
+            return -1;
+        else
+        {
+            struct node* item = record[key];
+            list_del(item);
+            list_add(dummy, item);
+            return item->val;
+        }
+    }
+    
+    void put(int key, int value) {
+        struct node* item = NULL;
+        if(record.find(key) != record.end())
+        {
+            struct node* item = record[key];
+            list_del(item);
+            item->val = value;
+            list_add(dummy, item);
+            return;
+        }
+        
+        if(size >= _capacity)
+        {
+            item = dummy->prev;
+            list_del(item);
+            record.erase(item->key);
+            free(item);
+            size--;
+        }
+    
+        item = new node();
+        item->key = key;
+        item->val = value;
+        item->next = item;
+        item->prev = item;
+        list_add(dummy, item);
+        size++;
+        record[key] = item;
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
