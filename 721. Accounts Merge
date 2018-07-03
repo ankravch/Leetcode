@@ -1,0 +1,80 @@
+class Solution {
+public:
+    vector<int> pa;
+    vector<int> rank;
+    map<string, int> record;
+    
+    int union_find(int p)
+    {
+        if(pa[p] != p)
+            pa[p] = union_find(pa[p]);
+        return pa[p];
+    }
+    
+    void union_merge(int p, int q)
+    {
+        if(rank[p] > rank[q])
+            pa[q] = pa[p];
+        else if(rank[p] == rank[q])
+        {
+            if(p < q)
+            {
+                pa[q] = pa[p];
+                rank[p]++;
+            }
+            else
+            {
+                pa[p] = pa[q];
+                rank[q]++;
+            }
+        }
+        else
+            pa[p] = pa[q];
+    }
+    
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        for(int i=0; i<accounts.size(); i++)
+        {
+            pa.push_back(i);
+            rank.push_back(0);
+        }
+        
+        for(int i=0; i<accounts.size(); i++)
+        {
+            for(int j=1; j<accounts[i].size(); j++)
+            {
+                if(record.find(accounts[i][j]) == record.end())
+                    record[accounts[i][j]] = union_find(i);
+                else
+                    union_merge(union_find(i), union_find(record[accounts[i][j]]));
+            }
+        }
+        
+        vector<vector<string>> ret;
+        map<int, int> index;
+        record.clear();
+        for(int i=0; i<accounts.size(); i++)
+        {
+            int p = union_find(i);
+            if(index.find(p) == index.end())
+            {
+                vector<string> tmp;
+                tmp.push_back(accounts[i][0]);
+                ret.push_back(tmp);
+                index[p] = ret.size()-1;
+            }
+            for(int j=1; j<accounts[i].size(); j++)
+            {
+                if(record.find(accounts[i][j]) == record.end())
+                {
+                    ret[index[p]].push_back(accounts[i][j]);
+                    record[accounts[i][j]] = 1;
+                }
+            }
+        }
+        
+        for(int i=0; i<ret.size(); i++)
+            sort(ret[i].begin()+1, ret[i].end());
+        return ret;
+    }
+};
