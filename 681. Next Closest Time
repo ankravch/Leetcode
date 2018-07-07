@@ -1,0 +1,52 @@
+class Solution {
+public:
+    
+    int bigger_time(int t, vector<char> &nums, int limit)
+    {
+        for(int i=0; i<4; i++)
+        {
+            for(int j=0; j<4; j++)
+            {
+                int min = (nums[i]-'0')*10+nums[j]-'0';
+                if(min > t && min < limit)
+                    return min;
+            }
+        }
+        return -1;
+    }
+    
+    
+    string nextClosestTime(string time) {
+        int hour = (time[0]-'0')*10+(time[1]-'0');
+        int miniute = (time[3]-'0')*10+(time[4]-'0');
+        
+        vector<char> nums;
+        nums.push_back(time[0]);
+        nums.push_back(time[1]);
+        nums.push_back(time[3]);
+        nums.push_back(time[4]);
+        sort(nums.begin(), nums.end());
+        
+        int t = -1;
+        if( (t=bigger_time(miniute, nums, 60)) != -1)
+        {
+            time[3] = t/10+'0';
+            time[4] = t%10+'0';
+        }
+        else if( (t=bigger_time(hour, nums, 24)) != -1 )
+        {
+            time[0] = t/10+'0';
+            time[1] = t%10+'0';
+            time[3] = nums[0];
+            time[4] = nums[0];
+        }
+        else
+        {
+            time[0] = nums[0];
+            time[1] = nums[0];
+            time[3] = nums[0];
+            time[4] = nums[0];
+        }
+        return time;
+    }
+};
