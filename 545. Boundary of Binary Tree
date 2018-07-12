@@ -1,0 +1,72 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isleaf(TreeNode* root)
+    {
+        return (root->left == NULL && root->right == NULL);
+    }
+    
+    void insert_leaf(TreeNode* root, vector<int> &leaf)
+    {
+        if(root)
+        {
+            insert_leaf(root->left, leaf);
+            insert_leaf(root->right, leaf);
+            
+            if(isleaf(root))
+                leaf.push_back(root->val);
+        }
+    }
+    
+    vector<int> boundaryOfBinaryTree(TreeNode* root) {
+        vector<TreeNode*> tmp;
+        vector<int> ret;
+        
+        if(root==NULL)
+            return ret;
+        
+        if(!isleaf(root))
+            ret.push_back(root->val);
+        
+        TreeNode* r = root->left;
+        while(r)
+        {
+            if(!isleaf(r))
+                ret.push_back(r->val);
+            
+            if(r->left)
+                r = r->left;
+            else
+                r = r->right;
+        }
+        
+        insert_leaf(root, ret);
+        
+        r=root->right;
+        while(r)
+        {
+            if(!isleaf(r))
+                tmp.push_back(r);
+            
+            if(r->right)
+                r = r->right;
+            else
+                r = r->left;
+        }
+        
+        for(int i=tmp.size()-1; i>=0; i--)
+        {
+            ret.push_back(tmp[i]->val);
+        }
+        
+        return ret;
+    }
+};
