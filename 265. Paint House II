@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int minCostII(vector<vector<int>>& costs) {
+        if(costs.size() == 0 || costs[0].size() == 0)
+            return 0;
+        
+        vector<pair<int, int>> dp(2, make_pair(0, INT_MAX));
+        vector<pair<int, int>> tmp(2, make_pair(INT_MAX, INT_MAX));
+        for(int i=0; i<costs.size(); i++)
+        {
+            for(int j=0; j<costs[i].size(); j++)
+            {
+                int val = costs[i][j];
+                int index = j;
+                if(j!=dp[0].second)
+                    val += dp[0].first;
+                else
+                    val += dp[1].first;
+                
+                if(val < tmp[0].first)
+                {
+                    swap(tmp[0].first, val);
+                    swap(tmp[0].second, index);
+                }
+                
+                if(val < tmp[1].first)
+                {
+                    swap(tmp[1].first, val);
+                    swap(tmp[1].second, index);
+                }
+            }
+            dp = tmp;
+            tmp[0].first = INT_MAX;
+            tmp[0].second = INT_MAX;
+            tmp[1].first = INT_MAX;
+            tmp[1].second = INT_MAX;
+        }
+        
+        return dp[0].first;
+    }
+};
