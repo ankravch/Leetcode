@@ -1,0 +1,30 @@
+class Solution {
+public:
+
+    int profitableSchemes(int G, int P, vector<int>& group, vector<int>& profit) {
+        vector<vector<int>> dp(G+1, vector<int>(P+1, 0));
+        dp[0][0] = 1;
+        for(int i=0; i<group.size(); i++)
+        {
+            int g = group[i];
+            int p = profit[i];
+            
+            for(int people=G-g; people>=0; people--)
+            {
+                for(int profit=P; profit>=0; profit--)
+                {
+                    if(profit+p >= P)
+                        dp[people+g][P] = (dp[people+g][P]+dp[people][profit])%1000000007;
+                    else
+                        dp[people+g][profit+p] = (dp[people+g][profit+p]+dp[people][profit])%1000000007;
+                }
+            }
+        }
+        
+        unsigned long long ret = 0;
+        for(int i=0; i<=G; i++)
+            ret += dp[i][P];
+        
+        return ret%1000000007;
+    }
+};
