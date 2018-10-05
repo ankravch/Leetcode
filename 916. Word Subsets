@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<string> wordSubsets(vector<string>& A, vector<string>& B) {
+        map<char, int> help;
+        for(int i=0; i<B.size(); i++)
+        {
+            map<char, int> tmp;
+            for(int j=0; j<B[i].length(); j++)
+            {
+                tmp[B[i][j]]++;
+                if(help.find(B[i][j]) == help.end() || help[B[i][j]] < tmp[B[i][j]])
+                    help[B[i][j]] = tmp[B[i][j]];
+            }
+        }
+        
+        vector<string> ret;
+        map<char, int>::iterator it;
+        for(int i=0; i<A.size(); i++)
+        {
+            for(it=help.begin(); it!=help.end(); it++)
+            {
+                if(count(A[i].begin(), A[i].end(), it->first) < it->second)
+                    break;
+            }
+            if(it == help.end())
+                ret.push_back(A[i]);
+        }
+        return ret;
+    }
+};
