@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int maxSubarraySumCircular(vector<int>& A) {
+        int sum = 0;
+        int _min = INT_MAX;
+        int _min_l = 0;
+        
+        int _max = INT_MIN;
+        int _max_l = 0;
+        
+        for(int i=0; i<A.size(); i++)
+        {
+            sum += A[i];
+            _min_l = min(A[i], _min_l+A[i]);
+            _min = min(_min, _min_l);
+            
+            _max_l = max(A[i], _max_l+A[i]);
+            _max = max(_max_l, _max);
+        }
+        
+        if(_max > 0)
+            return max(_max, sum-_min);
+        else
+            return _max;
+    }
+};
