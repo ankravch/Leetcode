@@ -1,0 +1,65 @@
+class Solution {
+public:
+    int threeSumMulti(vector<int>& A, int target) {
+        map<int, int> counts;
+        vector<int> nums;
+        int mod = 1000000000+7;
+        for(int i=0; i<A.size(); i++)
+        {
+            if(counts.find(A[i]) == counts.end())
+                nums.push_back(A[i]);
+            counts[A[i]]++;
+        }
+        
+        sort(nums.begin(), nums.end());
+        unsigned long long ret = 0;
+        for(int i=0; i<nums.size(); i++)
+        {
+            int j=i, k=nums.size()-1;
+            int left = target-nums[i];
+            while(j<=k)
+            {
+                if(nums[j]+nums[k]>left)
+                    k--;
+                else if(nums[j]+nums[k]<left)
+                    j++;
+                else
+                {
+                    unsigned long long tmp = 1;
+                    if(nums[i] == nums[j] && nums[j] == nums[k])
+                    {
+                        tmp *= counts[nums[i]];
+                        tmp *= (counts[nums[i]]-1);
+                        tmp *= (counts[nums[i]]-2);
+                        ret += tmp/6;
+                    }
+                    else if(nums[i] == nums[j] && nums[j] != nums[k])
+                    {
+                        tmp *= counts[nums[i]];
+                        tmp *= (counts[nums[i]]-1);
+                        tmp *= counts[nums[k]];
+                        ret += tmp/2;
+                    }
+                    else if(nums[i] != nums[j] && nums[j] == nums[k])
+                    {
+                        tmp *= counts[nums[k]];
+                        tmp *= (counts[nums[k]]-1);
+                        tmp *= counts[nums[i]];
+                        ret += tmp/2;
+                    }
+                    else
+                    {
+                        tmp *= counts[nums[i]];
+                        tmp *= counts[nums[j]];
+                        tmp *= counts[nums[k]];
+                        ret += tmp;
+                    }
+                    j++;
+                    k--;
+                    ret = ret%mod;
+                }
+            }
+        }
+        return ret;
+    }
+};
