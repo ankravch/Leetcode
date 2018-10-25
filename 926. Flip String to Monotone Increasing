@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int minFlipsMonoIncr(string S) {
+        vector<int> prefix(S.length()+1, 0);
+        int res = INT_MAX;
+        for(int i=0; i<S.length(); i++)
+            prefix[i+1] += prefix[i]+(S[i]-'0');
+        
+        for(int i=1; i<=S.length(); i++)
+        {
+            int tmp = prefix[i-1]+(S.length()-i)-prefix.back()+prefix[i];
+            res = min(res, tmp);
+        }
+        return res;
+    }
+};
