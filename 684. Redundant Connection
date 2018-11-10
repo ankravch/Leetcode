@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int union_p(vector<int> &pa, int n)
+    {
+        if(pa[n] == n)
+            return n;
+        pa[n] = union_p(pa, pa[n]);
+        return pa[n];
+    }
+    
+    void union_f(vector<int> &pa, vector<int> &w, int p, int q)
+    {
+        int p_p = union_p(pa, p);
+        int p_q = union_p(pa, q);
+        if(w[p_p] == w[p_q])
+        {
+            pa[p_q] = p_p;
+            w[p_p]++;
+        }
+        else if(w[p_p] > w[p_q])
+            pa[p_q] = p_p;
+        else
+            pa[p_p] = p_q;
+    }
+    
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int N = edges.size();
+        vector<int> pa(N+1, 0);
+        vector<int> w(N+1, 0);
+        for(int i=1; i<=N; i++)
+            pa[i] = i;
+        
+        for(int i=0; i<edges.size(); i++)
+        {
+            int p = edges[i][0];
+            int q = edges[i][1];
+            if(union_p(pa, p) == union_p(pa, q))
+                return edges[i];
+            else
+               union_f(pa, w, p, q); 
+        }
+    }
+};
