@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int distinctSubseqII(string S) {
+        vector<int> len(S.length()+1, 0);
+        vector<int> alpha(26, -1);
+        int mod = 1000000007;
+        
+        for(int i=1; i<=S.length(); i++)
+        {
+            len[i] = 2*len[i-1]%mod;
+            int prev = alpha[S[i-1]-'a'];
+            if(prev == -1)
+                len[i]++;
+            else
+                len[i] = (len[i]+mod-len[prev])%mod;
+            alpha[S[i-1]-'a'] = i-1;
+        }
+        return len.back();
+    }
+};
