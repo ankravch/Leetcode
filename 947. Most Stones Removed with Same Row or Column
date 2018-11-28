@@ -1,0 +1,79 @@
+class Solution {
+public:
+    int find_pa(map<int, int> &pa, int i)
+    {
+        if(pa[i] != i)
+            pa[i] = find_pa(pa, pa[i]);
+        return pa[i];
+    }
+    
+    void _union(map<int, int> &pa, map<int, int>& rank, int p, int q)
+    {
+        int p_p = find_pa(pa, p);
+        int p_q = find_pa(pa, q);
+        if(rank[p_p] == rank[p_q])
+        {
+            pa[p_q] = p_p;
+            rank[p_p]++;
+        }
+        else if(rank[p_p] > rank[p_q])
+        {
+            pa[p_q] = p_p;
+        }
+        else
+        {
+            pa[p_p] = p_q;
+        }
+    }
+    
+    int removeStones(vector<vector<int>>& stones) {
+        map<int, int> x;
+        map<int, int> y;
+        map<int, int> pa;
+        map<int, int> rank;
+        
+        for(int i=0; i<stones.size(); i++)
+        {
+            int _x = stones[i][0];
+            int _y = stones[i][1];
+            int w = _x*10000+_y;
+            
+            if(pa.find(w) == pa.end())
+                pa[w] = w;
+            
+            if(rank.find(w) == rank.end())
+                rank[w] = 0;
+            
+		    if (x.find(_x) == x.end() && y.find(_y) == y.end())
+		{
+			x[_x] = w;
+			y[_y] = w;
+		}
+		else if (x.find(_x) != x.end() && y.find(_y) == y.end())
+		{
+			_union(pa, rank, x[_x], find_pa(pa, w));
+			y[_y] = w;
+		}
+		else if (y.find(_y) != y.end() && x.find(_x) == x.end())
+		{
+			_union(pa, rank, y[_y], find_pa(pa, w));
+			x[_x] = w;
+		}
+		else
+		{
+			_union(pa, rank, x[_x], find_pa(pa, w));
+			_union(pa, rank, y[_y], find_pa(pa, w));
+		}
+        }
+        
+        int ret = 0;
+        map<int, int>::iterator it = pa.begin();
+        while(it != pa.end())
+        {
+            if(it->first != find_pa(pa, it->first))
+                ret++;
+            it++;
+        }
+        return ret;
+    }
+};
