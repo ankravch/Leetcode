@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int minDeletionSize(vector<string>& A) {
+        vector<bool> help(A.size()-1, false);
+        int ret = 0;
+        int row = A.size(), col = A[0].length();
+        for(int j=0; j<col; j++)
+        {
+            int i=0;
+            for(; i<row-1; i++)
+            {
+                if(!help[i] && A[i][j] > A[i+1][j])
+                {
+                    ret++;
+                    break;
+                }
+            }
+            if(i < row-1)
+                continue;
+            for(i=0; i<row-1; i++)
+            {
+                if(A[i][j] < A[i+1][j])
+                    help[i] = true;
+            }
+        }
+        return ret;
+    }
+};
