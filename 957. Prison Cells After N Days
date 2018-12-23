@@ -1,0 +1,42 @@
+class Solution {
+public:
+    vector<int> prisonAfterNDays(vector<int>& cells, int N) {
+        vector<vector<int>> ret;
+        map<vector<int>, int> help;
+        help[cells] = 0;
+        ret.push_back(cells);
+        int i = 1;
+        int index = -1;
+        for(; i<=N; i++)
+        {
+            vector<int> tmp = ret.back();
+            for(int j=0; j<8; j++)
+            {
+                if(j-1>=0 && j+1<8 && ((ret.back()[j-1] == 0 && ret.back()[j+1] == 0) || 
+                                       (ret.back()[j-1] == 1 && ret.back()[j+1] == 1)))
+                    tmp[j] = 1;
+                else
+                    tmp[j] = 0;
+            }
+            
+            if(help.find(tmp) != help.end())
+            {
+                index = help[tmp];
+                break;
+            }
+            else
+            {
+                help[tmp] = i;
+                ret.push_back(tmp);
+            }
+        }
+        if(i == N+1)
+            return ret.back();
+        else
+        {
+            int left = N-i;
+            int count = help.size()-index;
+            return ret[index+left%count];
+        }
+    }
+};
