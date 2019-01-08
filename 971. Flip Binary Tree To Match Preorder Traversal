@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+
+    void flipMatchVoyage(TreeNode* root, vector<int>& voyage, int &index, vector<int>& ret)
+    {
+        if(root)
+        {
+            if(root->val != voyage[index++])
+            {
+                ret.resize(0);
+                ret.push_back(-1);
+                return;
+            }
+            
+            if((root->left && root->left->val != voyage[index]) || !root->left)
+            {
+                if(root->left)
+                    ret.push_back(root->val);
+                flipMatchVoyage(root->right, voyage, index, ret);
+                flipMatchVoyage(root->left, voyage, index, ret);
+            }
+            else
+            {
+                flipMatchVoyage(root->left, voyage, index, ret);
+                flipMatchVoyage(root->right, voyage, index, ret);
+            }
+        }
+    }
+    
+    vector<int> flipMatchVoyage(TreeNode* root, vector<int>& voyage) {
+        vector<int> ret;
+        int index = 0;
+        flipMatchVoyage(root, voyage, index, ret);
+        return ret;
+    }
+};
