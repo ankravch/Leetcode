@@ -1,0 +1,32 @@
+class StockSpanner {
+public:
+    vector<int> help;
+    stack<int> mono_s;
+    int day = 0;
+    
+    StockSpanner() {
+        
+    }
+    
+    int next(int price) {
+        while(mono_s.size() !=0 && help[mono_s.top()]<= price)
+        {
+            mono_s.pop();
+        }
+        int ret = 0;
+        if(mono_s.size() == 0)
+            ret = day+1;
+        else
+            ret = day - mono_s.top();
+        mono_s.push(day);
+        help.push_back(price);
+        day++;
+        return ret;
+    }
+};
+
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner obj = new StockSpanner();
+ * int param_1 = obj.next(price);
+ */
