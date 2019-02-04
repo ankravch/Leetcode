@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    map<int, map<int, vector<int>>> help;
+    
+    void verticalTraversal(TreeNode* root, int x, int y)
+    {
+        if(root)
+        {
+            help[x][y].push_back(root->val);
+            verticalTraversal(root->left, x-1, y+1);
+            verticalTraversal(root->right, x+1, y+1);
+        }
+    }
+    
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        vector<vector<int>> ret;
+        verticalTraversal(root, 0, 0);
+        map<int, map<int, vector<int>>>::iterator it = help.begin();
+        for( ;it!=help.end(); it++)
+        {
+            map<int, vector<int>>::iterator iit = it->second.begin();
+            vector<int> tmp;
+            for( ;iit!=it->second.end(); iit++)
+            {
+                sort(iit->second.begin(), iit->second.end());
+                for(int i=0; i<iit->second.size(); i++)
+                {
+                    tmp.push_back((iit->second)[i]);
+                }
+            }
+            ret.push_back(tmp);
+        }
+        return ret;
+    }
+};
