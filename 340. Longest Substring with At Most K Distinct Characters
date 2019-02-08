@@ -1,0 +1,29 @@
+class Solution {
+public:
+    map<char, int> help;
+    int lengthOfLongestSubstringKDistinct(string s, int k) {
+        int start = 0;
+        int ret = 0;
+        int i=0;
+        for(; i<s.length();i++)
+        {
+            if(help.size() == k && help.find(s[i]) == help.end())
+            {
+                while(help.size() == k)
+                {
+                    help[s[start]]--;
+                    if(help[s[start]] == 0)
+                        help.erase(s[start]);
+                    start++;
+                }
+                help[s[i]]++;
+            }
+            else if(help.size() <= k)
+            {
+                ret = max(ret, i-start+1);
+                help[s[i]]++;
+            }
+        }
+        return ret;
+    }
+};
