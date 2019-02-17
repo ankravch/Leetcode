@@ -1,0 +1,68 @@
+class Solution {
+public:
+    
+    bool fresh(int x, int y, vector<vector<int>>& grid)
+    {
+        if(x<0 || x>=grid.size() || y<0 || y>=grid[0].size())
+            return false;
+        
+        if(grid[x][y] == 1)
+            return true;
+        else
+            return false;
+    }
+    
+    int orangesRotting(vector<vector<int>>& grid) {
+        int ret = 0;
+        queue<pair<int, int>> q;
+        for(int i=0; i<grid.size(); i++)
+        {
+            for(int j=0; j<grid[0].size(); j++)
+            {
+                if(grid[i][j] == 2)
+                    q.push(make_pair(i, j));
+            }
+        }
+        
+        while(q.size())
+        {
+            int _size = q.size();
+            bool rotten = false;
+            for(int i=0; i<_size; i++)
+            {
+                int _x = q.front().first;
+                int _y = q.front().second;
+                q.pop();
+                
+                int d_x = 1;
+                int d_y = 0;
+                for(int j = 0; j<4; j++)
+                {
+                    int n_x = _x + d_x;
+                    int n_y = _y + d_y;
+                    if(fresh(n_x, n_y, grid))
+                    {
+                        rotten = true;
+                        grid[n_x][n_y] = 2;
+                        q.push(make_pair(n_x, n_y));
+                    }
+                    int tmp = d_x;
+                    d_x = -d_y;
+                    d_y = tmp;
+                }
+            }
+            if(rotten)
+                ret++;
+        }
+        
+        for(int i=0; i<grid.size(); i++)
+        {
+            for(int j=0; j<grid[0].size(); j++)
+            {
+                if(grid[i][j] == 1)
+                    return -1;
+            }
+        }
+        return ret;
+    }
+};
