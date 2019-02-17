@@ -1,0 +1,30 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    map<int, pair<int, int>> help;
+    void _isCousins(TreeNode* root, int pa, int depth)
+    {
+        if(root)
+        {
+            help[root->val] = make_pair(pa, depth);
+            _isCousins(root->left, root->val, depth+1);
+            _isCousins(root->right, root->val, depth+1);
+        }
+    }
+    
+    bool isCousins(TreeNode* root, int x, int y) {
+        _isCousins(root, -1, 0);
+        if(help[x].first != help[y].first && help[x].second == help[y].second)
+            return true;
+        else
+            return false;
+    }
+};
