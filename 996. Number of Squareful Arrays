@@ -1,0 +1,36 @@
+class Solution {
+public:
+bool is_square(int val)
+{
+    int tmp = sqrt(val);
+    return tmp*tmp == val;
+}
+
+void numSquarefulPerms(vector<int>& A, int index, int& ret)
+{
+    if(index >= A.size())
+    {
+        ret++;
+    }
+    else
+    {
+        for(int i=index; i<A.size(); i++)
+        {
+            int j=index;
+            for(;j<i && A[i] != A[j];j++);
+            if(j!=i)
+                continue;
+                swap(A[i], A[index]);
+                if(index==0 || is_square(A[index]+A[index-1]))
+                    numSquarefulPerms(A, index+1, ret);
+                swap(A[i], A[index]);
+        }
+    }
+}
+    
+    int numSquarefulPerms(vector<int>& A) {
+        int ret = 0;
+        numSquarefulPerms(A, 0, ret);
+        return ret;
+    }
+};
