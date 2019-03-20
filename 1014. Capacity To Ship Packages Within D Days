@@ -1,0 +1,42 @@
+class Solution {
+public:
+    bool shipWithinDays(vector<int>& weights, int D, int e)
+    {
+        int j = 0;
+        while(D)
+        {
+            int tmp = e;
+            while(j<weights.size() && (tmp - weights[j] >= 0))
+            {
+                tmp -= weights[j];
+                j++;
+            }
+            if(j == weights.size())
+                return true;
+            D--;
+        }
+        return false;
+    }
+    
+    int shipWithinDays(vector<int>& weights, int D) {
+        int r = 25000000;
+        int res = 25000000;
+        int sum = 0;
+        for(int i=0; i<weights.size(); i++)
+            sum += weights[i];
+        
+        int l = sum/D;
+        while(l<=r)
+        {
+            int m = (l+r)/2;
+            if(shipWithinDays(weights, D, m))
+            {
+                res = min(res, m);
+                r = m-1;
+            }
+            else
+                l = m+1;
+        }
+        return res;
+    }
+};
