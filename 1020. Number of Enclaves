@@ -1,0 +1,82 @@
+class Solution {
+public:
+    bool valid(vector<vector<int>>& A, int row, int col, int i, int j, set<pair<int, int>> &s)
+    {
+        if(i<0 || i>=row || j<0 || j>=col || A[i][j] == 0 || s.find(make_pair(i,j)) != s.end())
+            return false;
+        return true;
+    }
+    
+    void bfs(vector<vector<int>>& A, int row, int col, int i, int j)
+    {
+        set<pair<int, int>> s;
+        queue<pair<int, int>> q;
+        s.insert(make_pair(i, j));
+        q.push(make_pair(i, j));
+        
+        while(q.size())
+        {
+            pair<int, int> tmp = q.front();
+            q.pop();
+            A[tmp.first][tmp.second] = 0;
+            int d_i = 1;
+            int d_j = 0;
+            for(int k=0; k<4; k++)
+            {
+                int n_i = tmp.first+d_i;
+                int n_j = tmp.second+d_j;
+                if(valid(A, row, col, n_i, n_j, s))
+                {
+                    q.push(make_pair(n_i, n_j));
+                    s.insert(make_pair(n_i, n_j));
+                }
+                int t = d_i;
+                d_i = d_j;
+                d_j = -t;
+            }
+        }
+    }
+    
+    int numEnclaves(vector<vector<int>>& A) {
+        int row = A.size();
+        int col = A[0].size();
+        int ret = 0;
+        
+        for(int i =0; i<col; i++)
+        {
+            if(A[0][i] == 1)
+                bfs(A, row, col, 0, i);
+        }
+        
+        for(int i =0; i<col; i++)
+        {
+            if(A[row-1][i] == 1)
+                bfs(A, row, col, row-1, i);
+        }
+
+        for(int i =0; i<row; i++)
+        {
+            if(A[i][0] == 1)
+            {
+                bfs(A, row, col, i, 0);
+            }
+        }
+        
+        for(int i =0; i<row; i++)
+        {
+            if(A[i][col-1] == 1)
+                bfs(A, row, col, i, col-1);
+        }
+        
+        for(int i=0; i<row; i++)
+        {
+            for(int j=0; j<col; j++)
+            {
+                int step = 0;
+                if(A[i][j] == 1)
+                    ret++;
+            }
+        }
+        return ret;
+    }
+};
