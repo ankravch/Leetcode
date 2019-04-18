@@ -1,0 +1,45 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+
+    Node() {}
+
+    Node(int _val, Node* _left, Node* _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
+};
+*/
+class Solution {
+public:
+    Node* leftmost = NULL;
+    Node* pre = NULL;
+    
+    void help(Node* root) {
+        if(!root)
+            return;
+        help(root->left);
+        if(!leftmost)
+            leftmost = root;
+        if(pre)
+            pre->right = root;
+        root->left = pre;
+        pre = root;
+        help(root->right); 
+    }
+    
+    Node* treeToDoublyList(Node* root)
+    {
+        help(root);
+        if(leftmost)
+            leftmost->left = pre;
+        if(pre)
+            pre->right = leftmost;
+        return leftmost;
+    }
+};
