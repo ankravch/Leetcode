@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int maxUncrossedLines(vector<int>& A, vector<int>& B) {
+        vector<vector<int>> dp(A.size()+1, vector<int>(B.size()+1, 0));
+        int i=0, j=0;
+        for(; i<A.size(); i++)
+        {
+            j = 0;
+            for(; j<B.size(); j++)
+            {
+                int tmp = max(dp[i+1][j], dp[i][j+1]);
+                if(A[i] == B[j])
+                    tmp = max(tmp, dp[i][j]+1);
+                dp[i+1][j+1] = tmp;
+            }
+        }
+        return dp[i][j];
+    }
+};
