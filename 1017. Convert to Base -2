@@ -1,0 +1,14 @@
+class Solution {
+public:
+    string baseNeg2(int N) {
+        string ret = "";
+        while(N)
+        {
+            ret = (to_string(N&1)+ret);
+            if(N%-2)
+                N--;
+            N = N/(-2);
+        }
+        return ret == ""?"0":ret;
+    }
+};
