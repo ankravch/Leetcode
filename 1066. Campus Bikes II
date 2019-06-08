@@ -1,0 +1,31 @@
+class Solution {
+public:
+    map<int, int> help;
+    
+    int assignBikes(vector<vector<int>>& workers, vector<vector<int>>& bikes, int m, int i)
+    {
+        if(i == workers.size())
+            return 0;
+        
+        if(help.find(m) != help.end())
+            return help[m];
+        
+        int local = INT_MAX;
+        for(int j=0; j<bikes.size(); j++)
+        {
+            if((m>>j) & 1)
+                continue;
+            m ^= (1<<j);
+            int tmp = abs(bikes[j][0]-workers[i][0])+abs(bikes[j][1]-workers[i][1]);
+            local = min(local, tmp+assignBikes(workers, bikes, m, i+1));
+            m ^= (1<<j);
+        }
+        help[m] = local;
+        return help[m];
+    }
+    
+    
+    int assignBikes(vector<vector<int>>& workers, vector<vector<int>>& bikes) {
+        return assignBikes(workers, bikes, 0, 0);
+    }
+};
